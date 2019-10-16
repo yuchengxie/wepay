@@ -1,4 +1,9 @@
-import datetime,time,json,socket,random,hashlib
+import datetime
+import time
+import json
+import socket
+import random
+import hashlib
 from urllib import request as request2
 import xmltodict
 import requests
@@ -174,20 +179,22 @@ def trans_xml_to_dict(xml):
     # todo
     return 'data'
 
+
 @app.route('/')
 def hello():
     return "hello service"
 
-@app.route('/createorder',methods=['POST'])
+
+@app.route('/createorder', methods=['POST'])
 def createOrder():
-    openid=request.json.get('openid')
-    print('>>> get openid:',openid)
+    openid = request.json.get('openid')
+    print('>>> get openid:', openid)
     nonce_str = getNonceStr()
     out_trade_no = getPayOrdrID()
     spbill_create_ip = SPBILL_CREATE_IP
-    total_fee = 1 #注意订单总金额，单位为分
+    total_fee = 1  # 注意订单总金额，单位为分
     body = 'test'
-    
+
     order_dict = {
         "appid": APP_ID,
         "body": body,
@@ -215,7 +222,7 @@ def createOrder():
         data = {}
         if xmlresp['xml']['return_code'] == 'SUCCESS':
             if xmlresp['xml']['result_code'] == 'SUCCESS':
-            # 二次签名
+                # 二次签名
                 data = {
                     "appId": xmlresp['xml']['appid'],
                     "nonceStr": getNonceStr(),
@@ -225,22 +232,24 @@ def createOrder():
                 }
                 print('sign again')
                 data['paySign'] = xcx_pay_sign(data)
-                data=json.dumps(data).encode('utf-8')
+                data = json.dumps(data).encode('utf-8')
                 return data
     except ValueError as e:
         return 'error'
 
+
 @app.route("/getopenid", methods=["GET"])
 def getOpenid():
-    code=request.args.get('code')
-    url="https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code".format(APP_ID,APP_SECRET,code)
-    rsp = request2.urlopen(url,None)
-    print('rsp.status:',rsp.status)
+    code = request.args.get('code')
+    url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code".format(
+        APP_ID, APP_SECRET, code)
+    rsp = request2.urlopen(url, None)
+    print('rsp.status:', rsp.status)
     msg = rsp.read().decode('utf-8')
-    dic=json.loads(msg)
-    openid=dic["openid"]
+    dic = json.loads(msg)
+    openid = dic["openid"]
     return openid
 
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    app.run(port=3000, host='0.0.0.0', debug=False)
