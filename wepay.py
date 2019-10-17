@@ -250,9 +250,9 @@ def getOpenid():
     msg = rsp.read().decode('utf-8')
     print('msg:',msg,type(msg))
     dic = json.loads(msg)
-    if(dic['openid']==None):
+    print('dic:',dic,type(dic))
+    if(not dic.has_key('openid')):
         return 'no openid'
-    print('dic:',dic)
     openid = dic["openid"]
     return openid
 
