@@ -248,8 +248,10 @@ def getOpenid():
     rsp = request2.urlopen(url, None)
     print('rsp.status:', rsp.status)
     msg = rsp.read().decode('utf-8')
-    print('msg:',msg)
+    print('msg:',msg,type(msg))
     dic = json.loads(msg)
+    if(dic['openid']==None):
+        return 'no openid'
     print('dic:',dic)
     openid = dic["openid"]
     return openid
