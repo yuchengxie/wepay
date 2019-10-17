@@ -241,9 +241,10 @@ def createOrder():
 @app.route("/getopenid", methods=["GET"])
 def getOpenid():
     code = request.args.get('code')
+    print('get code:',code)
     url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code".format(
         APP_ID, APP_SECRET, code)
-    print('getopenid url:',code)
+    print('getopenid url:',url)
     rsp = request2.urlopen(url, None)
     print('rsp.status:', rsp.status)
     msg = rsp.read().decode('utf-8')
