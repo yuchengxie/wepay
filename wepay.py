@@ -251,8 +251,8 @@ def getOpenid():
     print('msg:',msg,type(msg))
     dic = json.loads(msg)
     print('dic:',dic,type(dic))
-    if(not dic.has_key('openid')):
-        return 'no openid'
+    # if(not dic.has_key('openid')):
+    #     return 'no openid'
     openid = dic["openid"]
     return openid
 
